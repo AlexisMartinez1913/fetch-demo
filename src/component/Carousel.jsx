@@ -1,5 +1,6 @@
 import Card from "./Card"
 const Carousel = ({onLeftClick, onRightClick, elementList=[]})=> {
+    
     return (
         <div className="flex w-full justify-center items-center">
             <button onClick={onLeftClick} className="border-t-4 border-l-4 border-gray-300 w-8 h-8 -rotate-45"></button>
