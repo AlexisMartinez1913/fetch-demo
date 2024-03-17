@@ -17,24 +17,25 @@ function App() {
   const [selectedPoke, setSelectedPoke] = useState({})
   const [page, setPage] = useState(0);
   const [isDarkMode, setIsDarkMode] = useState(false)
-  useEffect(()=>{
-    const fetchData = async ()=> {
-      const data = await axiosInstance.get('/pokemon?limit=6&offset=0');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await axiosInstance.get(`/pokemon?limit=6&offset=${page * 6}`);
       setPokeList(data.data.results)
     }
     fetchData()
-  },[])
+  },[page])
 
-  const getInfo = async (url)=> {
+  const getInfo = async (url) => {
     const data = await axiosInstance.get(url)
     setSelectedPoke({img: data.data.sprites.front_default, stats:data.data.stats})
   }
-  const getPokemonList = ()=> {
+  const getPokemonList =  () => {
     return pokeList.map((pokemon)=>{
       return {
         name: pokemon.name,
         img: '/whos.jpg',
-        onClick: ()=> getInfo(pokemon.url)
+        onClick: () => getInfo(pokemon.url)
       }
     })
   }
