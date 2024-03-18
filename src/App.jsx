@@ -18,10 +18,21 @@ function App() {
   const [page, setPage] = useState(0);
   const [isDarkMode, setIsDarkMode] = useState(false)
 
+  const [pokemonImages, setPokemonImages] = useState([])
+
   useEffect(() => {
     const fetchData = async () => {
       const data = await axiosInstance.get(`/pokemon?limit=6&offset=${page * 6}`);
       setPokeList(data.data.results)
+      /*
+      cambios para mostrar las imagenes y arreglr el carousel
+       */
+      const images = await Promise.all(data.data.results.map(async (pokemon) => {
+        const response = await axiosInstance.get(pokemon.url)
+        return response.data.sprites.front_default
+
+      }))
+      setPokemonImages(images)
     }
     fetchData()
   },[page])
@@ -31,10 +42,10 @@ function App() {
     setSelectedPoke({img: data.data.sprites.front_default, stats:data.data.stats})
   }
   const getPokemonList =  () => {
-    return pokeList.map((pokemon)=>{
+    return pokeList.map((pokemon, index)=>{
       return {
         name: pokemon.name,
-        img: '/whos.jpg',
+        img: pokemonImages[index],
         onClick: () => getInfo(pokemon.url)
       }
     })
